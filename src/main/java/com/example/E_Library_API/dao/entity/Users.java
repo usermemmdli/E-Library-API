@@ -36,7 +36,7 @@ public class Users implements UserDetails {
     String password;
     String address;
     @JoinColumn(name = "role_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     Roles roles;
     Date createdAt;
     Date updatedAt;

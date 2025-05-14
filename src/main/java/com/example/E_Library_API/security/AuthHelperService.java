@@ -1,7 +1,7 @@
 package com.example.E_Library_API.security;
 
 import com.example.E_Library_API.dao.entity.Users;
-import com.example.E_Library_API.dao.repository.UsersRepository;
+import com.example.E_Library_API.dao.repository.jpa.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

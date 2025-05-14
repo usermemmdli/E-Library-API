@@ -1,7 +1,7 @@
 package com.example.E_Library_API.security;
 
 import com.example.E_Library_API.dao.entity.Users;
-import com.example.E_Library_API.dao.repository.UsersRepository;
+import com.example.E_Library_API.dao.repository.jpa.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,7 +21,7 @@ public class MyUsersDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(users.getEmail())
                 .password(users.getPassword())
-                .authorities("ROLE_USER")
+                .authorities("ROLE_" + users.getRoles().getName())
                 .build();
     }
 }
