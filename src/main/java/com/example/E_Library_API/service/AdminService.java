@@ -5,12 +5,18 @@ import com.example.E_Library_API.dao.repository.mongo.BooksRepository;
 import com.example.E_Library_API.dto.request.BooksAvailableRequest;
 import com.example.E_Library_API.dto.request.BooksRequest;
 import com.example.E_Library_API.dto.request.BooksUpdateRequest;
+import com.example.E_Library_API.enums.Genre;
+import com.example.E_Library_API.enums.Language;
+import com.example.E_Library_API.exception.EntityNotFoundException;
+import com.example.E_Library_API.exception.InvalidValueException;
+import com.example.E_Library_API.exception.IsbnAlreadyIsTaken;
 import com.example.E_Library_API.security.AuthHelperService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
 
 @Service
@@ -28,10 +34,12 @@ public class AdminService {
         if (!booksRepository.existsByIsbn(booksRequest.getIsbn())) {
             books.setIsbn(booksRequest.getIsbn());
         } else {
-            throw new RuntimeException("ISBN is already taken");
+            throw new IsbnAlreadyIsTaken("ISBN is already taken");
         }
-        books.setCategory(booksRequest.getCategory());
+        checkGenre(booksRequest.getGenre());
+        books.setGenre(booksRequest.getGenre());
         books.setCoverImage(booksRequest.getCoverImage());
+        checkLanguage(booksRequest.getLanguage());
         books.setLanguage(booksRequest.getLanguage());
         books.setIsAvailable(booksRequest.getIsAvailable());
         books.setPublishedDate(booksRequest.getPublishedDate());
@@ -42,14 +50,15 @@ public class AdminService {
 
     public void updateBooks(@Valid BooksUpdateRequest booksUpdateRequest, String currentUserEmail) {
         authHelperService.getAuthenticatedUser(currentUserEmail);
-        Books updatedBooks = booksRepository.findById(booksUpdateRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+        Books updatedBooks = booksRepository.findById(booksUpdateRequest.getId()).orElseThrow(() -> new RuntimeException("Book not found"));
         updatedBooks.setTitle(booksUpdateRequest.getTitle());
         updatedBooks.setAuthor(booksUpdateRequest.getAuthor());
         updatedBooks.setDescription(booksUpdateRequest.getDescription());
         updatedBooks.setIsbn(booksUpdateRequest.getIsbn());
-        updatedBooks.setCategory(booksUpdateRequest.getCategory());
+        checkGenre(booksUpdateRequest.getGenre());
+        updatedBooks.setGenre(booksUpdateRequest.getGenre());
         updatedBooks.setCoverImage(booksUpdateRequest.getCoverImage());
+        checkLanguage(booksUpdateRequest.getLanguage());
         updatedBooks.setLanguage(booksUpdateRequest.getLanguage());
         updatedBooks.setIsAvailable(booksUpdateRequest.getIsAvailable());
         updatedBooks.setPublishedDate(booksUpdateRequest.getPublishedDate());
@@ -60,21 +69,33 @@ public class AdminService {
     public void updateBooksAvailable(BooksAvailableRequest booksAvailableRequest, String currentUserEmail) {
         authHelperService.getAuthenticatedUser(currentUserEmail);
         Books books = booksRepository.findById(booksAvailableRequest.getId())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
         books.setIsAvailable(booksAvailableRequest.getIsAvailable());
         booksRepository.save(books);
     }
 
     public void deleteBooks(String id, String currentUserEmail) {
-        System.err.println("----------------->> AdminService deleteBooks");
         authHelperService.getAuthenticatedUser(currentUserEmail);
-        System.err.println("----------------->> AdminService deleteBooks");
         if (booksRepository.existsById(id)) {
-            System.err.println("----------------->> AdminService deleteBooks");
             booksRepository.deleteById(id);
-            System.err.println("----------------->> AdminService deleteBooks");
         } else {
-            throw new RuntimeException("Book not found");
+            throw new EntityNotFoundException("Book not found");
+        }
+    }
+
+    public void checkGenre(String genreName) {
+        boolean exists = Arrays.stream(Genre.values())
+                .anyMatch(g -> g.getDisplayName().equals(genreName));
+        if (!exists) {
+            throw new InvalidValueException("Invalid genre name: " + genreName);
+        }
+    }
+
+    public void checkLanguage(String languageName) {
+        boolean exists = Arrays.stream(Language.values())
+                .anyMatch(l -> l.getLanguageName().equals(languageName));
+        if (!exists) {
+            throw new InvalidValueException("Invalid language name: " + languageName);
         }
     }
 }

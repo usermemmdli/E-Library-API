@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                         .requestMatchers("/api/v1/users/**").hasAnyRole("ADMIN", "USER", "SUPERUSER")
                         .requestMatchers("/api/v1/books/**").hasAnyRole("USER", "SUPERUSER")
+                        .requestMatchers("/api/v1/cart/**").hasAnyRole("USER", "SUPERUSER")
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())

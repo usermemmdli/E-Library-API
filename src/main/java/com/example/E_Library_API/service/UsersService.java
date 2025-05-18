@@ -6,6 +6,7 @@ import com.example.E_Library_API.dto.request.UsersChangePasswordRequest;
 import com.example.E_Library_API.dto.request.UsersDeleteAccountsRequest;
 import com.example.E_Library_API.dto.request.UsersEditRequest;
 import com.example.E_Library_API.dto.response.UsersAccountsResponse;
+import com.example.E_Library_API.exception.InvalidPasswordException;
 import com.example.E_Library_API.mapper.UsersMapper;
 import com.example.E_Library_API.security.AuthHelperService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class UsersService {
         if (passwordEncoder.matches(usersChangePasswordRequest.getOldPassword(), users.getPassword())) {
             users.setPassword(passwordEncoder.encode(usersChangePasswordRequest.getNewPassword()));
         } else {
-            throw new RuntimeException("Old password is incorrect");
+            throw new InvalidPasswordException("Old password is incorrect");
         }
         users.setUpdatedAt(Date.from(Instant.now()));
         usersRepository.save(users);
@@ -54,7 +55,7 @@ public class UsersService {
         if (passwordEncoder.matches(usersDeleteAccountsRequest.getPassword(), users.getPassword())) {
             usersRepository.delete(users);
         } else {
-            throw new RuntimeException("Password is incorrect");
+            throw new InvalidPasswordException("Password is incorrect");
         }
     }
 }

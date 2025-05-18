@@ -13,13 +13,13 @@ public class BooksMapper {
                 .id(books.getId())
                 .title(books.getTitle())
                 .author(books.getAuthor())
+                .genre(books.getGenre())
+                .publishedDate(books.getPublishedDate())
                 .description(books.getDescription())
                 .isbn(books.getIsbn())
-                .category(books.getCategory())
                 .coverImage(books.getCoverImage())
                 .language(books.getLanguage())
                 .isAvailable(books.getIsAvailable())
-                .publishedDate(books.getPublishedDate())
                 .build();
     }
 }

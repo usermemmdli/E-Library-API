@@ -21,7 +21,8 @@ import java.util.List;
 public class Cart {
     @Id
     String id;
-    String userId;
+    Long userId;
     List<String> bookId;
     Date createdAt;
+    Date updatedAt;
 }

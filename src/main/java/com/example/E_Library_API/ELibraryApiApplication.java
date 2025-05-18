@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableJpaRepositories(basePackages = "com.example.E_Library_API.dao.repository.jpa")
 @EnableMongoRepositories(basePackages = "com.example.E_Library_API.dao.repository.mongo")
 public class ELibraryApiApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(ELibraryApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ELibraryApiApplication.class, args);
+    }
 }

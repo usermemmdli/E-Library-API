@@ -22,7 +22,6 @@ public class BooksService {
     private final BooksMapper booksMapper;
     private final AuthHelperService authHelperService;
 
-
     public BooksPaginationResponse getBooksPagination(int page, int count, String currentUserEmail) {
         authHelperService.getAuthenticatedUser(currentUserEmail);
         Pageable pageable = PageRequest.of(page, count);
@@ -33,6 +32,4 @@ public class BooksService {
                 .toList());
         return new BooksPaginationResponse(booksResponseList, allBooks.getTotalElements(), allBooks.getTotalPages(), allBooks.hasNext());
     }
-
-
 }

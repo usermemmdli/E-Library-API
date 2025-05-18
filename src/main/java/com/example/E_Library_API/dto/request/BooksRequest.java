@@ -1,18 +1,26 @@
 package com.example.E_Library_API.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 public class BooksRequest {
+    @NotNull
     String title;
+    @NotNull
     String author;
+    @NotNull
     String description;
+    @NotNull
     String isbn;
-    String category;
+    @NotNull
+    String genre;
+    @NotNull
     String coverImage;
+    @NotNull
     String language;
+    @NotNull
     Boolean isAvailable;
-    LocalDate publishedDate;
+    @NotNull
+    String publishedDate;
 }

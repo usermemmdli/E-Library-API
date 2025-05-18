@@ -2,6 +2,7 @@ package com.example.E_Library_API.security;
 
 import com.example.E_Library_API.dao.entity.Users;
 import com.example.E_Library_API.dao.repository.jpa.UsersRepository;
+import com.example.E_Library_API.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +15,7 @@ public class AuthHelperService {
 
     public Users getAuthenticatedUser(String currentUserEmail) {
         return usersRepository.findByEmail(currentUserEmail)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + currentUserEmail));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + currentUserEmail));
     }
 
     public String getCurrentUserEmail() {

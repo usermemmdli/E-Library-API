@@ -7,7 +7,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,13 +22,13 @@ public class Books {
     String id;
     String title;
     String author;
+    String genre;
     String description;
     String isbn;
-    String category;
     String coverImage;
     String language;
     Boolean isAvailable;
-    LocalDate publishedDate;
+    String publishedDate;
     Date createdAt;
     Date updatedAt;
 }

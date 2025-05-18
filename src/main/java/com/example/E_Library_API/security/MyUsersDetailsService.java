@@ -2,6 +2,7 @@ package com.example.E_Library_API.security;
 
 import com.example.E_Library_API.dao.entity.Users;
 import com.example.E_Library_API.dao.repository.jpa.UsersRepository;
+import com.example.E_Library_API.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ public class MyUsersDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Users users = usersRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(users.getEmail())
