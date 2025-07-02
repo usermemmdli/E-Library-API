@@ -48,6 +48,6 @@ public class Users implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.email;
+        return this.username;
     }
 }
