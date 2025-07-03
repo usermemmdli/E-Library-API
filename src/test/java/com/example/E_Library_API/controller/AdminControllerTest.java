@@ -6,15 +6,13 @@ import com.example.E_Library_API.dto.request.BooksUpdateRequest;
 import com.example.E_Library_API.security.AuthHelperService;
 import com.example.E_Library_API.service.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.*;
@@ -22,22 +20,17 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = AdminController.class)
+@AutoConfigureTestDatabase
 public class AdminControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
+    @MockitoBean
     private AdminService adminService;
-    @Mock
+    @MockitoBean
     private AuthHelperService authHelperService;
     @Autowired
     private ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     @WithMockUser(username = "user@example.com", roles = {"ADMIN", "SUPERADMIN"})
@@ -61,7 +54,7 @@ public class AdminControllerTest {
                         .content(objectMapper.writeValueAsString(booksRequest)))
                 .andExpect(status().isCreated());
 
-        verify(adminService, times(1)).addBooks(any(BooksRequest.class), any(String.class));
+        verify(adminService, times(1)).addBooks(any(BooksRequest.class), eq("user@example.com"));
     }
 
     @Test
