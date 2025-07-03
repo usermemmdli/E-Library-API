@@ -27,7 +27,7 @@ public class CartController {
     @DeleteMapping()
     @PreAuthorize("hasAnyRole('USER','SUPERUSER')")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBookFromCart(String id) {
+    public void deleteBookFromCart(@RequestParam String id) {
         String currentUserEmail = authHelperService.getCurrentUserEmail();
         cartService.deleteBookFromCart(id, currentUserEmail);
     }
